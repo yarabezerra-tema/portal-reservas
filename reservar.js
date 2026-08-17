@@ -5,6 +5,10 @@ const SUPABASE_KEY =
     "sb_publishable_IxQS_KAQbFja1ljfrbNMSg_A9yk8AlQ";
 
 
+/* =====================================================
+   VERIFICAR LOGIN
+===================================================== */
+
 const accessToken =
     localStorage.getItem("access_token");
 
@@ -20,7 +24,7 @@ if (!accessToken) {
 
 
 /* =====================================================
-   ELEMENTOS
+   ELEMENTOS DA PÁGINA
 ===================================================== */
 
 const ambienteSelect =
@@ -52,7 +56,7 @@ const environmentInfo =
 
 
 /* =====================================================
-   CABEÇALHOS
+   CABEÇALHOS PARA O SUPABASE
 ===================================================== */
 
 function headers() {
@@ -79,74 +83,191 @@ function headers() {
 
 async function carregarAmbientes() {
 
-    const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/ambientes?ativo=eq.true&select=id,nome,tipo,capacidade&order=nome`,
-        {
-            headers: headers()
+    ambienteSelect.innerHTML =
+        `<option value="">
+            Carregando ambientes...
+        </option>`;
+
+
+    try {
+
+        const response = await fetch(
+
+            `${SUPABASE_URL}/rest/v1/ambientes?ativo=eq.true&select=id,nome,tipo,capacidade&order=nome`,
+
+            {
+                method: "GET",
+
+                headers: headers()
+
+            }
+
+        );
+
+
+        /* ==========================================
+           SE O SUPABASE RETORNAR ERRO
+        ========================================== */
+
+        if (!response.ok) {
+
+            const erro =
+                await response.text();
+
+            console.error(
+                "ERRO SUPABASE:",
+                response.status,
+                erro
+            );
+
+
+            ambienteSelect.innerHTML =
+                `<option value="">
+                    Erro ${response.status}
+                </option>`;
+
+
+            environmentInfo.innerHTML =
+
+                `<strong>
+                    Erro ao carregar ambientes.
+                </strong>
+                <br><br>
+                Código: ${response.status}
+                <br><br>
+                ${erro}`;
+
+
+            return;
+
         }
-    );
 
 
-if (!response.ok) {
+        /* ==========================================
+           CONVERTER RESPOSTA
+        ========================================== */
 
-    const erro = await response.text();
-
-    console.error("ERRO SUPABASE:", erro);
-
-    ambienteSelect.innerHTML =
-        `<option value="">
-            Erro ${response.status}
-        </option>`;
-
-    environmentInfo.innerHTML =
-        `<strong>Erro do Supabase:</strong><br>${erro}`;
-
-    return;
-
-}
+        const ambientes =
+            await response.json();
 
 
-    const ambientes =
-        await response.json();
+        console.log(
+            "Ambientes recebidos:",
+            ambientes
+        );
 
 
-    ambienteSelect.innerHTML =
-        `<option value="">
-            Selecione um ambiente
-        </option>`;
+        /* ==========================================
+           VERIFICAR SE EXISTEM AMBIENTES
+        ========================================== */
+
+        if (
+            !Array.isArray(ambientes) ||
+            ambientes.length === 0
+        ) {
+
+            ambienteSelect.innerHTML =
+                `<option value="">
+                    Nenhum ambiente disponível
+                </option>`;
 
 
-    ambientes.forEach(ambiente => {
+            environmentInfo.innerHTML =
+                "Não existem ambientes ativos cadastrados.";
 
-        const option =
-            document.createElement("option");
+            return;
 
-        option.value =
-            ambiente.id;
+        }
 
-        option.textContent =
-            ambiente.nome;
 
-        option.dataset.tipo =
-            ambiente.tipo;
+        /* ==========================================
+           LIMPAR CAMPO
+        ========================================== */
 
-        option.dataset.capacidade =
-            ambiente.capacidade || "";
+        ambienteSelect.innerHTML =
+            `<option value="">
+                Selecione um ambiente
+            </option>`;
 
-        ambienteSelect.appendChild(option);
 
-    });
+        /* ==========================================
+           ADICIONAR AMBIENTES
+        ========================================== */
+
+        ambientes.forEach(
+            function(ambiente) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    ambiente.id;
+
+
+                option.textContent =
+                    ambiente.nome;
+
+
+                option.dataset.tipo =
+                    ambiente.tipo;
+
+
+                option.dataset.capacidade =
+                    ambiente.capacidade || "";
+
+
+                ambienteSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        console.log(
+            "Ambientes carregados com sucesso."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "ERRO DE CONEXÃO:",
+            error
+        );
+
+
+        ambienteSelect.innerHTML =
+            `<option value="">
+                Erro de conexão
+            </option>`;
+
+
+        environmentInfo.innerHTML =
+
+            `<strong>
+                Erro de conexão com o Supabase.
+            </strong>
+            <br><br>
+            ${error.message}`;
+
+    }
 
 }
 
 
 /* =====================================================
-   INFORMAÇÕES DO AMBIENTE
+   QUANDO ESCOLHER UM AMBIENTE
 ===================================================== */
 
 ambienteSelect.addEventListener(
     "change",
-    function () {
+    function() {
+
 
         const option =
             ambienteSelect.options[
@@ -163,17 +284,39 @@ ambienteSelect.addEventListener(
         }
 
 
-        if (option.dataset.tipo === "laboratorio") {
+        /* ==========================================
+           LABORATÓRIO
+        ========================================== */
+
+        if (
+            option.dataset.tipo ===
+            "laboratorio"
+        ) {
 
             environmentInfo.innerHTML =
-                "🧬 Laboratório: é necessário reservar com pelo menos <strong>48 horas de antecedência</strong>. Duração máxima de 2 horas.";
 
-        } else {
-
-            environmentInfo.innerHTML =
-                "📚 Sala de Tutoria: reserva livre conforme disponibilidade. Duração máxima de 2 horas.";
+                "🧬 <strong>Laboratório:</strong> " +
+                "é necessário reservar com pelo menos " +
+                "<strong>48 horas de antecedência</strong>. " +
+                "Duração máxima de 2 horas.";
 
         }
+
+
+        /* ==========================================
+           TUTORIA
+        ========================================== */
+
+        else {
+
+            environmentInfo.innerHTML =
+
+                "📚 <strong>Sala de Tutoria:</strong> " +
+                "reserva livre conforme disponibilidade. " +
+                "Duração máxima de 2 horas.";
+
+        }
+
 
         verificarDisponibilidade();
 
@@ -182,7 +325,7 @@ ambienteSelect.addEventListener(
 
 
 /* =====================================================
-   VERIFICAR CONFLITOS
+   VERIFICAR DISPONIBILIDADE
 ===================================================== */
 
 async function verificarDisponibilidade() {
@@ -214,65 +357,158 @@ async function verificarDisponibilidade() {
     }
 
 
+    /* ==========================================
+       HORÁRIO INVÁLIDO
+    ========================================== */
+
     if (inicio >= fim) {
 
-        availability.textContent =
-            "⚠️ O horário de término deve ser posterior ao início.";
-
-        return;
-
-    }
-
-
-    const reservasResponse =
-        await fetch(
-            `${SUPABASE_URL}/rest/v1/reservas?ambiente_id=eq.${ambiente}&data=eq.${data}&status=neq.cancelada&select=hora_inicio,hora_fim`,
-            {
-                headers: headers()
-            }
-        );
-
-
-    if (!reservasResponse.ok) {
-
-        availability.textContent =
-            "Não foi possível verificar a disponibilidade.";
-
-        return;
-
-    }
-
-
-    const reservas =
-        await reservasResponse.json();
-
-
-    const conflito =
-        reservas.some(reserva => {
-
-            return (
-                reserva.hora_inicio < fim &&
-                reserva.hora_fim > inicio
-            );
-
-        });
-
-
-    if (conflito) {
-
         availability.innerHTML =
-            "<strong>❌ Horário indisponível.</strong> Já existe uma reserva neste período.";
+            "⚠️ O horário de término deve ser posterior ao início.";
 
         availability.dataset.available =
             "false";
 
-    } else {
+        return;
+
+    }
+
+
+    /* ==========================================
+       VERIFICAR LIMITE DE 2 HORAS
+    ========================================== */
+
+    const inicioMinutos =
+        converterMinutos(inicio);
+
+    const fimMinutos =
+        converterMinutos(fim);
+
+
+    const duracao =
+        fimMinutos -
+        inicioMinutos;
+
+
+    if (duracao > 120) {
 
         availability.innerHTML =
-            "<strong>✓ Horário disponível.</strong>";
+            "⚠️ A duração máxima da reserva é de 2 horas.";
 
         availability.dataset.available =
-            "true";
+            "false";
+
+        return;
+
+    }
+
+
+    /* ==========================================
+       CONSULTAR RESERVAS
+    ========================================== */
+
+    try {
+
+        const reservasResponse =
+            await fetch(
+
+                `${SUPABASE_URL}/rest/v1/reservas?ambiente_id=eq.${ambiente}&data=eq.${data}&status=neq.cancelada&select=hora_inicio,hora_fim`,
+
+                {
+                    method: "GET",
+
+                    headers: headers()
+
+                }
+
+            );
+
+
+        if (!reservasResponse.ok) {
+
+            const erro =
+                await reservasResponse.text();
+
+
+            console.error(
+                "ERRO AO CONSULTAR RESERVAS:",
+                erro
+            );
+
+
+            availability.innerHTML =
+                "⚠️ Não foi possível verificar a disponibilidade.";
+
+            availability.dataset.available =
+                "false";
+
+            return;
+
+        }
+
+
+        const reservas =
+            await reservasResponse.json();
+
+
+        /* ==========================================
+           PROCURAR CONFLITO
+        ========================================== */
+
+        const conflito =
+            reservas.some(
+                function(reserva) {
+
+                    return (
+
+                        reserva.hora_inicio <
+                        fim &&
+
+                        reserva.hora_fim >
+                        inicio
+
+                    );
+
+                }
+            );
+
+
+        if (conflito) {
+
+            availability.innerHTML =
+                "<strong>❌ Horário indisponível.</strong> " +
+                "Já existe uma reserva neste período.";
+
+            availability.dataset.available =
+                "false";
+
+        }
+
+        else {
+
+            availability.innerHTML =
+                "<strong>✓ Horário disponível.</strong>";
+
+            availability.dataset.available =
+                "true";
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "ERRO DE CONEXÃO:",
+            error
+        );
+
+
+        availability.innerHTML =
+            "⚠️ Erro ao verificar disponibilidade.";
+
+        availability.dataset.available =
+            "false";
 
     }
 
@@ -280,7 +516,7 @@ async function verificarDisponibilidade() {
 
 
 /* =====================================================
-   VERIFICAR QUANDO DATA/HORÁRIO MUDAR
+   VERIFICAR QUANDO DATA OU HORÁRIO MUDAR
 ===================================================== */
 
 dataInput.addEventListener(
@@ -288,10 +524,12 @@ dataInput.addEventListener(
     verificarDisponibilidade
 );
 
+
 inicioInput.addEventListener(
     "change",
     verificarDisponibilidade
 );
+
 
 fimInput.addEventListener(
     "change",
@@ -333,9 +571,15 @@ document
 
             const quantidade =
                 quantidadeInput.value
-                    ? Number(quantidadeInput.value)
+                    ? Number(
+                        quantidadeInput.value
+                    )
                     : null;
 
+
+            /* ==========================================
+               VALIDAR AMBIENTE
+            ========================================== */
 
             if (!ambiente) {
 
@@ -347,6 +591,10 @@ document
             }
 
 
+            /* ==========================================
+               VALIDAR HORÁRIO
+            ========================================== */
+
             if (inicio >= fim) {
 
                 message.textContent =
@@ -356,6 +604,10 @@ document
 
             }
 
+
+            /* ==========================================
+               VALIDAR DURAÇÃO
+            ========================================== */
 
             const inicioMinutos =
                 converterMinutos(inicio);
@@ -378,16 +630,20 @@ document
             }
 
 
+            /* ==========================================
+               VERIFICAR DISPONIBILIDADE
+            ========================================== */
+
             await verificarDisponibilidade();
 
 
             if (
-                availability.dataset.available ===
-                "false"
+                availability.dataset.available !==
+                "true"
             ) {
 
                 message.textContent =
-                    "Esse horário já está ocupado.";
+                    "Não é possível realizar a reserva nesse horário.";
 
                 return;
 
@@ -395,15 +651,22 @@ document
 
 
             /* ==========================================
-               PEGAR USUÁRIO LOGADO
+               OBTER USUÁRIO LOGADO
             ========================================== */
 
             const userResponse =
                 await fetch(
+
                     `${SUPABASE_URL}/auth/v1/user`,
+
                     {
+
+                        method: "GET",
+
                         headers: headers()
+
                     }
+
                 );
 
 
@@ -427,12 +690,15 @@ document
 
             const reservaResponse =
                 await fetch(
+
                     `${SUPABASE_URL}/rest/v1/reservas`,
+
                     {
 
                         method: "POST",
 
                         headers: {
+
                             ...headers(),
 
                             "Prefer":
@@ -440,32 +706,34 @@ document
 
                         },
 
-                        body: JSON.stringify({
+                        body:
+                            JSON.stringify({
 
-                            usuario_id:
-                                user.id,
+                                usuario_id:
+                                    user.id,
 
-                            ambiente_id:
-                                ambiente,
+                                ambiente_id:
+                                    ambiente,
 
-                            data:
-                                data,
+                                data:
+                                    data,
 
-                            hora_inicio:
-                                inicio,
+                                hora_inicio:
+                                    inicio,
 
-                            hora_fim:
-                                fim,
+                                hora_fim:
+                                    fim,
 
-                            finalidade:
-                                finalidade,
+                                finalidade:
+                                    finalidade,
 
-                            quantidade_pessoas:
-                                quantidade
+                                quantidade_pessoas:
+                                    quantidade
 
-                        })
+                            })
 
                     }
+
                 );
 
 
@@ -473,31 +741,56 @@ document
                 await reservaResponse.json();
 
 
+            /* ==========================================
+               ERRO AO CRIAR RESERVA
+            ========================================== */
+
             if (!reservaResponse.ok) {
 
-                console.error(resultado);
+                console.error(
+                    "ERRO AO CRIAR RESERVA:",
+                    resultado
+                );
 
-                message.textContent =
-                    resultado.message ||
-                    "Não foi possível realizar a reserva.";
+
+                message.innerHTML =
+
+                    `<strong>
+                        Não foi possível realizar a reserva.
+                    </strong>
+                    <br><br>
+                    ${resultado.message || "Erro desconhecido."}`;
 
                 return;
 
             }
 
 
+            /* ==========================================
+               SUCESSO
+            ========================================== */
+
             message.innerHTML =
                 "✅ <strong>Reserva realizada com sucesso!</strong>";
 
 
             document
-                .getElementById("reservationForm")
+                .getElementById(
+                    "reservationForm"
+                )
                 .reset();
 
 
-            environmentInfo.textContent = "";
+            environmentInfo.textContent =
+                "";
 
-            availability.textContent = "";
+
+            availability.textContent =
+                "";
+
+
+            availability.dataset.available =
+                "";
 
 
         }
@@ -508,21 +801,27 @@ document
    CONVERTER HORÁRIO PARA MINUTOS
 ===================================================== */
 
-function converterMinutos(horario) {
+function converterMinutos(
+    horario
+) {
 
     const partes =
         horario.split(":");
 
+
     return (
+
         Number(partes[0]) * 60 +
+
         Number(partes[1])
+
     );
 
 }
 
 
 /* =====================================================
-   LOGOUT
+   SAIR
 ===================================================== */
 
 function logout() {
@@ -531,9 +830,11 @@ function logout() {
         "access_token"
     );
 
+
     localStorage.removeItem(
         "refresh_token"
     );
+
 
     window.location.href =
         "index.html";
@@ -542,7 +843,7 @@ function logout() {
 
 
 /* =====================================================
-   DATA MÍNIMA
+   CONFIGURAR DATA MÍNIMA
 ===================================================== */
 
 function configurarDataMinima() {
@@ -550,13 +851,16 @@ function configurarDataMinima() {
     const hoje =
         new Date();
 
+
     const ano =
         hoje.getFullYear();
+
 
     const mes =
         String(
             hoje.getMonth() + 1
         ).padStart(2, "0");
+
 
     const dia =
         String(
@@ -569,6 +873,10 @@ function configurarDataMinima() {
 
 }
 
+
+/* =====================================================
+   INICIAR PÁGINA
+===================================================== */
 
 configurarDataMinima();
 

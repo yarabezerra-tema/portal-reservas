@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nova Reserva | UNIFAMETRO</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div>
+        <strong>PORTAL DE RESERVAS</strong>
+        <span>UNIFAMETRO</span>
+    </div>
+
+    <button
+        class="logout-button"
+        onclick="logout()"
+    >
+        SAIR
+    </button>
+
+</header>
+
+
+<main class="dashboard">
+
+    <section class="welcome">
+
+        <h1>Nova reserva</h1>
+
+        <p>
+            Escolha o ambiente, a data e o horário.
+        </p>
+
+    </section>
+
+
+    <section class="my-reservations">
+
+        <form id="reservationForm">
+
+            <label for="ambiente">
+                Ambiente
+            </label>
+
+            <select id="ambiente" required>
+
+                <option value="">
+                    Carregando ambientes...
+                </option>
+
+            </select>
+
+
+            <div
+                id="environmentInfo"
+                class="reservation-info"
+            ></div>
+
+
+            <label for="data">
+                Data
+            </label>
+
+            <input
+                type="date"
+                id="data"
+                required
+            >
+
+
+            <label for="hora_inicio">
+                Horário de início
+            </label>
+
+            <input
+                type="time"
+                id="hora_inicio"
+                required
+            >
+
+
+            <label for="hora_fim">
+                Horário de término
+            </label>
+
+            <input
+                type="time"
+                id="hora_fim"
+                required
+            >
+
+
+            <label for="finalidade">
+                Finalidade
+            </label>
+
+            <textarea
+                id="finalidade"
+                rows="4"
+                placeholder="Informe o motivo da utilização."
+                required
+            ></textarea>
+
+
+            <label for="quantidade">
+                Quantidade de pessoas
+            </label>
+
+            <input
+                type="number"
+                id="quantidade"
+                min="1"
+                placeholder="Ex.: 5"
+            >
+
+
+            <div
+                id="availability"
+                class="reservation-info"
+            ></div>
+
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                CONFIRMAR RESERVA
+            </button>
+
+            <p id="message"></p>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<script src="reservar.js"></script>
+
+</body>
+
+</html>

@@ -87,20 +87,23 @@ async function carregarAmbientes() {
     );
 
 
-    if (!response.ok) {
+if (!response.ok) {
 
-        console.error(
-            await response.text()
-        );
+    const erro = await response.text();
 
-        ambienteSelect.innerHTML =
-            `<option value="">
-                Erro ao carregar ambientes
-            </option>`;
+    console.error("ERRO SUPABASE:", erro);
 
-        return;
+    ambienteSelect.innerHTML =
+        `<option value="">
+            Erro ${response.status}
+        </option>`;
 
-    }
+    environmentInfo.innerHTML =
+        `<strong>Erro do Supabase:</strong><br>${erro}`;
+
+    return;
+
+}
 
 
     const ambientes =

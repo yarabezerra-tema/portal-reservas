@@ -7,101 +7,286 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     background: #f4f7f9;
+    color: #243746;
     min-height: 100vh;
 }
 
-.login-container {
-    min-height: 100vh;
+
+/* =========================
+   BARRA SUPERIOR
+========================= */
+
+.topbar {
+    background: #17324d;
+    color: white;
+
+    min-height: 72px;
+
+    padding: 0 6%;
+
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 20px;
+    justify-content: space-between;
 }
 
-.login-card {
-    width: 100%;
-    max-width: 430px;
-    background: white;
-    padding: 45px;
-    border-radius: 16px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+.topbar strong {
+    display: block;
+    font-size: 18px;
+    letter-spacing: 0.5px;
 }
 
-.logo-area {
-    text-align: center;
+.topbar span {
+    display: block;
+    font-size: 12px;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-area > span {
+    margin: 0;
+    font-size: 14px;
+}
+
+
+/* =========================
+   BOTÃO SAIR
+========================= */
+
+.logout-button {
+    border: 1px solid rgba(255,255,255,0.5);
+
+    background: transparent;
+
+    color: white;
+
+    padding: 9px 18px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.logout-button:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.dashboard {
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 50px 25px;
+}
+
+
+/* =========================
+   BOAS-VINDAS
+========================= */
+
+.welcome {
     margin-bottom: 35px;
 }
 
-.logo-area h1 {
-    font-size: 24px;
+.welcome h1 {
+    font-size: 28px;
     color: #17324d;
-    letter-spacing: 1px;
+    margin-bottom: 10px;
 }
 
-.logo-area p {
-    margin-top: 8px;
-    color: #657786;
-    font-size: 14px;
+.welcome p {
+    color: #6b7c89;
 }
 
-.login-title {
-    margin-bottom: 25px;
+
+/* =========================
+   CARDS
+========================= */
+
+.reservation-options {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 25px;
+
+    margin-bottom: 45px;
 }
 
-.login-title h2 {
-    color: #1d2d3d;
-    margin-bottom: 8px;
-}
+.reservation-card {
+    background: white;
 
-.login-title p {
-    color: #687887;
-    font-size: 14px;
-}
+    border-radius: 14px;
 
-form {
+    padding: 30px;
+
+    min-height: 270px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,0.06);
+
     display: flex;
+
     flex-direction: column;
+
+    justify-content: space-between;
 }
 
-label {
-    margin-bottom: 7px;
-    color: #354656;
-    font-size: 14px;
+.card-label {
+    font-size: 12px;
+
     font-weight: bold;
+
+    letter-spacing: 1px;
+
+    color: #6c8293;
 }
 
-input {
-    height: 46px;
-    padding: 0 14px;
-    border: 1px solid #d6dde3;
-    border-radius: 8px;
-    margin-bottom: 20px;
+.reservation-card h2 {
+    margin-top: 12px;
+
+    margin-bottom: 15px;
+
+    color: #17324d;
+
+    font-size: 22px;
+}
+
+.card-content p {
+    color: #687887;
+
     font-size: 14px;
+
+    line-height: 1.6;
+
+    margin-bottom: 5px;
 }
 
-input:focus {
-    outline: none;
-    border-color: #387a9b;
-}
 
-button {
-    height: 46px;
+/* =========================
+   BOTÃO PRINCIPAL
+========================= */
+
+.primary-button {
+    width: 100%;
+
+    height: 45px;
+
     border: none;
-    border-radius: 8px;
+
+    border-radius: 7px;
+
     background: #17324d;
+
     color: white;
-    font-size: 14px;
+
     font-weight: bold;
+
     cursor: pointer;
-    margin-top: 5px;
+
+    margin-top: 25px;
 }
 
-button:hover {
+.primary-button:hover {
     opacity: 0.9;
 }
 
-#message {
-    margin-top: 15px;
-    text-align: center;
+
+/* =========================
+   MINHAS RESERVAS
+========================= */
+
+.my-reservations {
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,0.05);
+}
+
+.section-title {
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.section-title h2 {
+    font-size: 20px;
+
+    color: #17324d;
+}
+
+.section-title span {
+    color: #8a98a3;
+
+    font-size: 13px;
+}
+
+.empty-reservations {
+    border-top: 1px solid #e7ebee;
+
+    padding-top: 25px;
+
+    color: #7c8992;
+
     font-size: 14px;
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 15px 20px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .user-area {
+        width: 100%;
+
+        justify-content: space-between;
+    }
+
+    .dashboard {
+        padding: 30px 15px;
+    }
+
+    .reservation-options {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome h1 {
+        font-size: 23px;
+    }
+
 }

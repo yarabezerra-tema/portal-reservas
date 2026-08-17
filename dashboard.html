@@ -18,6 +18,7 @@
 
 <body>
 
+
     <!-- =========================
          BARRA SUPERIOR
     ========================== -->
@@ -46,8 +47,9 @@
     </header>
 
 
+
     <!-- =========================
-         CONTEÚDO PRINCIPAL
+         CONTEÚDO
     ========================== -->
 
     <main class="dashboard">
@@ -69,7 +71,9 @@
 
 
 
-        <!-- OPÇÕES DE RESERVA -->
+        <!-- =========================
+             OPÇÕES
+        ========================== -->
 
         <section class="reservation-options">
 
@@ -105,12 +109,12 @@
                 </div>
 
 
-                <button
+                <a
+                    href="reservar.html"
                     class="primary-button"
-                    onclick="abrirLaboratorios()"
                 >
                     RESERVAR
-                </button>
+                </a>
 
             </div>
 
@@ -145,12 +149,12 @@
                 </div>
 
 
-                <button
+                <a
+                    href="reservar.html"
                     class="primary-button"
-                    onclick="abrirTutorias()"
                 >
                     RESERVAR
-                </button>
+                </a>
 
             </div>
 
@@ -159,10 +163,11 @@
 
 
 
-        <!-- MINHAS RESERVAS -->
+        <!-- =========================
+             MINHAS RESERVAS
+        ========================== -->
 
         <section class="my-reservations">
-
 
             <div class="section-title">
 
@@ -185,7 +190,6 @@
 
             </div>
 
-
         </section>
 
 
@@ -194,36 +198,10 @@
 
 
     <!-- =========================
-         JAVASCRIPT
+         SAIR
     ========================== -->
 
     <script>
-
-
-        /*
-         * Abrir tela de reserva
-         */
-
-        function abrirLaboratorios() {
-
-            window.location.href =
-                "reservar.html";
-
-        }
-
-
-        function abrirTutorias() {
-
-            window.location.href =
-                "reservar.html";
-
-        }
-
-
-
-        /*
-         * Sair do sistema
-         */
 
         function logout() {
 
@@ -239,7 +217,6 @@
                 "index.html";
 
         }
-
 
     </script>
 

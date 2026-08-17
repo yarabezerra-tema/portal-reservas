@@ -18,6 +18,10 @@
 
 <body>
 
+    <!-- =========================
+         BARRA SUPERIOR
+    ========================== -->
+
     <header class="topbar">
 
         <div>
@@ -25,7 +29,9 @@
             <span>UNIFAMETRO</span>
         </div>
 
+
         <div class="user-area">
+
             <span>Olá, aluno</span>
 
             <button
@@ -34,16 +40,26 @@
             >
                 SAIR
             </button>
+
         </div>
 
     </header>
 
 
+    <!-- =========================
+         CONTEÚDO PRINCIPAL
+    ========================== -->
+
     <main class="dashboard">
+
+
+        <!-- BOAS-VINDAS -->
 
         <section class="welcome">
 
-            <h1>Bem-vindo ao Portal de Reservas</h1>
+            <h1>
+                Bem-vindo ao Portal de Reservas
+            </h1>
 
             <p>
                 Escolha o espaço que deseja utilizar.
@@ -52,7 +68,13 @@
         </section>
 
 
+
+        <!-- OPÇÕES DE RESERVA -->
+
         <section class="reservation-options">
+
+
+            <!-- LABORATÓRIO -->
 
             <div class="reservation-card">
 
@@ -68,15 +90,20 @@
 
                     <p>
                         Reservas com no mínimo
-                        <strong>48 horas de antecedência.</strong>
+                        <strong>
+                            48 horas de antecedência.
+                        </strong>
                     </p>
 
                     <p>
                         Duração máxima:
-                        <strong>2 horas.</strong>
+                        <strong>
+                            2 horas.
+                        </strong>
                     </p>
 
                 </div>
+
 
                 <button
                     class="primary-button"
@@ -87,6 +114,9 @@
 
             </div>
 
+
+
+            <!-- SALA DE TUTORIA -->
 
             <div class="reservation-card">
 
@@ -107,10 +137,13 @@
 
                     <p>
                         Duração máxima:
-                        <strong>2 horas.</strong>
+                        <strong>
+                            2 horas.
+                        </strong>
                     </p>
 
                 </div>
+
 
                 <button
                     class="primary-button"
@@ -121,20 +154,28 @@
 
             </div>
 
+
         </section>
 
 
+
+        <!-- MINHAS RESERVAS -->
+
         <section class="my-reservations">
+
 
             <div class="section-title">
 
-                <h2>Minhas reservas</h2>
+                <h2>
+                    Minhas reservas
+                </h2>
 
                 <span>
                     Próximas utilizações
                 </span>
 
             </div>
+
 
             <div class="empty-reservations">
 
@@ -144,55 +185,64 @@
 
             </div>
 
+
         </section>
+
 
     </main>
 
 
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
     <script>
+
+
+        /*
+         * Abrir tela de reserva
+         */
 
         function abrirLaboratorios() {
 
-    window.location.href =
-        "reservar.html";
-
-}
-
-
-function abrirTutorias() {
-
-    window.location.href =
-        "reservar.html";
-
-}
-
-            alert(
-                "A próxima etapa será escolher o laboratório, data e horário."
-            );
+            window.location.href =
+                "reservar.html";
 
         }
 
 
         function abrirTutorias() {
 
-            alert(
-                "A próxima etapa será escolher a sala, data e horário."
-            );
+            window.location.href =
+                "reservar.html";
 
         }
 
+
+
+        /*
+         * Sair do sistema
+         */
 
         function logout() {
 
-            localStorage.removeItem("access_token");
+            localStorage.removeItem(
+                "access_token"
+            );
 
-            localStorage.removeItem("refresh_token");
+            localStorage.removeItem(
+                "refresh_token"
+            );
 
-            window.location.href = "index.html";
+            window.location.href =
+                "index.html";
 
         }
 
+
     </script>
+
 
 </body>
 

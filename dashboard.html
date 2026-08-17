@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Portal de Reservas</title>
+    <title>Portal de Reservas | UNIFAMETRO</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -18,37 +18,156 @@
 
 <body>
 
-    <main class="login-container">
+    <header class="topbar">
 
-        <section class="login-card">
+        <div>
+            <strong>PORTAL DE RESERVAS</strong>
+            <span>UNIFAMETRO</span>
+        </div>
 
-            <div class="logo-area">
+        <div class="user-area">
+            <span>Olá, aluno</span>
 
-                <h1>PORTAL DE RESERVAS</h1>
+            <button
+                class="logout-button"
+                onclick="logout()"
+            >
+                SAIR
+            </button>
+        </div>
 
-                <p>UNIFAMETRO</p>
+    </header>
+
+
+    <main class="dashboard">
+
+        <section class="welcome">
+
+            <h1>Bem-vindo ao Portal de Reservas</h1>
+
+            <p>
+                Escolha o espaço que deseja utilizar.
+            </p>
+
+        </section>
+
+
+        <section class="reservation-options">
+
+            <div class="reservation-card">
+
+                <div class="card-content">
+
+                    <span class="card-label">
+                        LABORATÓRIO
+                    </span>
+
+                    <h2>
+                        Laboratório de Anatomia
+                    </h2>
+
+                    <p>
+                        Reservas com no mínimo
+                        <strong>48 horas de antecedência.</strong>
+                    </p>
+
+                    <p>
+                        Duração máxima:
+                        <strong>2 horas.</strong>
+                    </p>
+
+                </div>
+
+                <button
+                    class="primary-button"
+                    onclick="abrirLaboratorios()"
+                >
+                    RESERVAR
+                </button>
 
             </div>
 
-            <div class="login-title">
 
-                <h2>Login realizado! ✅</h2>
+            <div class="reservation-card">
+
+                <div class="card-content">
+
+                    <span class="card-label">
+                        TUTORIA
+                    </span>
+
+                    <h2>
+                        Salas de Tutoria
+                    </h2>
+
+                    <p>
+                        Reserva livre conforme
+                        disponibilidade.
+                    </p>
+
+                    <p>
+                        Duração máxima:
+                        <strong>2 horas.</strong>
+                    </p>
+
+                </div>
+
+                <button
+                    class="primary-button"
+                    onclick="abrirTutorias()"
+                >
+                    RESERVAR
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section class="my-reservations">
+
+            <div class="section-title">
+
+                <h2>Minhas reservas</h2>
+
+                <span>
+                    Próximas utilizações
+                </span>
+
+            </div>
+
+            <div class="empty-reservations">
 
                 <p>
-                    Bem-vindo ao Portal de Reservas.
+                    Você ainda não possui reservas.
                 </p>
 
             </div>
-
-            <button onclick="logout()">
-                SAIR
-            </button>
 
         </section>
 
     </main>
 
+
     <script>
+
+        function abrirLaboratorios() {
+
+            alert(
+                "A próxima etapa será escolher o laboratório, data e horário."
+            );
+
+        }
+
+
+        function abrirTutorias() {
+
+            alert(
+                "A próxima etapa será escolher a sala, data e horário."
+            );
+
+        }
+
 
         function logout() {
 

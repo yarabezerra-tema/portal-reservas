@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Portal de Reservas</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <main class="login-container">
+
+        <section class="login-card">
+
+            <div class="logo-area">
+
+                <h1>PORTAL DE RESERVAS</h1>
+
+                <p>UNIFAMETRO</p>
+
+            </div>
+
+            <div class="login-title">
+
+                <h2>Login realizado! ✅</h2>
+
+                <p>
+                    Bem-vindo ao Portal de Reservas.
+                </p>
+
+            </div>
+
+            <button onclick="logout()">
+                SAIR
+            </button>
+
+        </section>
+
+    </main>
+
+    <script>
+
+        function logout() {
+
+            localStorage.removeItem("access_token");
+
+            localStorage.removeItem("refresh_token");
+
+            window.location.href = "index.html";
+
+        }
+
+    </script>
+
+</body>
+
+</html>

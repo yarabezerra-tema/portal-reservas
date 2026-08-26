@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Redefinir senha | UniFAMETRO IDOMED</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #063b46 0%,
+                    #075563 55%,
+                    #087f86 100%
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 30px;
+
+        }
+
+
+        .container {
+
+            width: 100%;
+
+            max-width: 500px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 45px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.22);
+
+        }
+
+
+        .logo {
+
+            display: block;
+
+            width: 280px;
+
+            max-width: 100%;
+
+            margin: 0 auto 35px;
+
+        }
+
+
+        h1 {
+
+            color: #063b46;
+
+            font-size: 27px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .subtitle {
+
+            color: #6c757d;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .form-group {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            color: #34454a;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        input {
+
+            width: 100%;
+
+            height: 50px;
+
+            border: 1px solid #d8e0e2;
+
+            border-radius: 9px;
+
+            padding: 0 15px;
+
+            font-size: 15px;
+
+            outline: none;
+
+        }
+
+
+        input:focus {
+
+            border-color: #087f86;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(8, 127, 134, 0.10);
+
+        }
+
+
+        button {
+
+            width: 100%;
+
+            height: 52px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #f28c28;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+        }
+
+
+        button:hover {
+
+            background: #df7918;
+
+        }
+
+
+        button:disabled {
+
+            opacity: .7;
+
+            cursor: wait;
+
+        }
+
+
+        .message {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 13px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .error {
+
+            display: block;
+
+            background: #fff0f0;
+
+            color: #a12a2a;
+
+            border: 1px solid #f2caca;
+
+        }
+
+
+        .success {
+
+            display: block;
+
+            background: #eefaf6;
+
+            color: #126b57;
+
+            border: 1px solid #c6e9df;
+
+        }
+
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #087f86;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+        }
+
+
+        .back:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            body {
+
+                padding: 15px;
+
+            }
+
+
+            .container {
+
+                padding: 32px 25px;
+
+            }
+
+
+            .logo {
+
+                width: 240px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <img
+        src="logo-horizontal-transparente.png"
+        alt="UniFAMETRO IDOMED"
+        class="logo"
+    >
+
+
+    <h1>
+        Criar nova senha
+    </h1>
+
+
+    <p class="subtitle">
+
+        Digite uma nova senha para acessar
+        o Portal de Reservas.
+
+    </p>
+
+
+    <form id="resetForm">
+
+
+        <div class="form-group">
+
+            <label for="password">
+
+                Nova senha
+
+            </label>
+
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Digite sua nova senha"
+                minlength="6"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="passwordConfirm">
+
+                Confirmar nova senha
+
+            </label>
+
+
+            <input
+                type="password"
+                id="passwordConfirm"
+                placeholder="Digite novamente sua senha"
+                minlength="6"
+                required
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            id="resetButton"
+        >
+
+            ALTERAR SENHA
+
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+    </form>
+
+
+    <a
+        href="index.html"
+        class="back"
+    >
+        ← Voltar para o login
+    </a>
+
+
+</div>
+
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+    /* =====================================
+       CONFIGURAÇÃO DO SUPABASE
+    ====================================== */
+
+    const SUPABASE_URL =
+        "https://aoyvwjbhwaermlapxvkq.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_IxQS_KAQbFja1ljfrbNMSg_A9yk8AlQ";
+
+
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    /* =====================================
+       ELEMENTOS DA PÁGINA
+    ====================================== */
+
+    const form =
+        document.getElementById(
+            "resetForm"
+        );
+
+
+    const button =
+        document.getElementById(
+            "resetButton"
+        );
+
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    /* =====================================
+       MOSTRAR MENSAGEM
+    ====================================== */
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        message.textContent = text;
+
+        message.className =
+            "message " + type;
+
+    }
+
+
+    /* =====================================
+       ALTERAR SENHA
+    ====================================== */
+
+    form.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const password =
+                document
+                    .getElementById("password")
+                    .value
+                    .trim();
+
+
+            const passwordConfirm =
+                document
+                    .getElementById("passwordConfirm")
+                    .value
+                    .trim();
+
+
+            /* ==============================
+               VALIDAR TAMANHO
+            =============================== */
+
+            if (
+                password.length < 6
+            ) {
+
+                showMessage(
+                    "A senha deve ter pelo menos 6 caracteres.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /* ==============================
+               CONFIRMAR SENHAS
+            =============================== */
+
+            if (
+                password !== passwordConfirm
+            ) {
+
+                showMessage(
+                    "As senhas não são iguais.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /* ==============================
+               DESABILITAR BOTÃO
+            =============================== */
+
+            button.disabled = true;
+
+            button.textContent =
+                "ALTERANDO...";
+
+
+            /* ==============================
+               ATUALIZAR SENHA NO SUPABASE
+            =============================== */
+
+            const {
+                error
+            } =
+                await supabaseClient.auth.updateUser({
+                    password: password
+                });
+
+
+            /* ==============================
+               TRATAR ERRO
+            =============================== */
+
+            if (error) {
+
+                console.error(
+                    "Erro ao alterar senha:",
+                    error
+                );
+
+
+                showMessage(
+                    "Não foi possível alterar a senha. O link pode ter expirado. Solicite uma nova recuperação.",
+                    "error"
+                );
+
+
+                button.disabled = false;
+
+                button.textContent =
+                    "ALTERAR SENHA";
+
+
+                return;
+
+            }
+
+
+            /* ==============================
+               SUCESSO
+            =============================== */
+
+            showMessage(
+                "Senha alterada com sucesso! Você será redirecionado para o login.",
+                "success"
+            );
+
+
+            /* ==============================
+               VOLTAR PARA LOGIN
+            =============================== */
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "index.html";
+
+                },
+                2500
+            );
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

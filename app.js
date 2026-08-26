@@ -4,75 +4,161 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_IxQS_KAQbFja1ljfrbNMSg_A9yk8AlQ";
 
-const loginForm = document.getElementById("loginForm");
-const message = document.getElementById("message");
 
-loginForm.addEventListener("submit", async function(event) {
+/* ==========================================
+   ELEMENTOS DO LOGIN
+========================================== */
 
-    event.preventDefault();
+const loginForm =
+    document.getElementById("login-form");
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+const message =
+    document.getElementById("message");
 
-    message.textContent = "Entrando...";
 
-    if (!email.endsWith("@aluno.unifametro.edu.br")) {
+/* ==========================================
+   LOGIN
+========================================== */
 
-        message.textContent =
-            "Utilize seu e-mail institucional.";
+if (loginForm) {
 
-        return;
-    }
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
 
-    try {
+            event.preventDefault();
 
-        const response = await fetch(
-            `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
-            {
-                method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json",
-                    "apikey": SUPABASE_KEY
-                },
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
 
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            }
-        );
 
-        const data = await response.json();
+            const password =
+                document
+                    .getElementById("password")
+                    .value;
 
-        if (!response.ok) {
+
+            message.className = "message";
 
             message.textContent =
-                data.error_description ||
-                "E-mail ou senha incorretos.";
+                "Entrando...";
 
-            return;
+
+            /* ==============================
+               VALIDAR E-MAIL INSTITUCIONAL
+            =============================== */
+
+            if (
+                !email.endsWith(
+                    "@aluno.unifametro.edu.br"
+                )
+            ) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Utilize seu e-mail institucional.";
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "apikey":
+                                    SUPABASE_KEY
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    email: email,
+                                    password: password
+                                })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                /* ==============================
+                   ERRO NO LOGIN
+                =============================== */
+
+                if (!response.ok) {
+
+                    message.className =
+                        "message error";
+
+                    message.textContent =
+                        data.error_description ||
+                        "E-mail ou senha incorretos.";
+
+                    return;
+
+                }
+
+
+                /* ==============================
+                   SALVAR SESSÃO
+                =============================== */
+
+                localStorage.setItem(
+                    "access_token",
+                    data.access_token
+                );
+
+
+                localStorage.setItem(
+                    "refresh_token",
+                    data.refresh_token
+                );
+
+
+                /* ==============================
+                   IR PARA DASHBOARD
+                =============================== */
+
+                window.location.href =
+                    "dashboard.html";
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Erro no login:",
+                    error
+                );
+
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Não foi possível conectar ao sistema.";
+
+            }
+
         }
+    );
 
-        localStorage.setItem(
-            "access_token",
-            data.access_token
-        );
-
-        localStorage.setItem(
-            "refresh_token",
-            data.refresh_token
-        );
-
-        window.location.href = "dashboard.html";
-
-    } catch (error) {
-
-        console.error(error);
-
-        message.textContent =
-            "Não foi possível conectar ao sistema.";
-
-    }
-
-});
+}

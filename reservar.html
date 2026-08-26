@@ -10,19 +10,157 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Nova Reserva | UNIFAMETRO</title>
+    <title>Nova Reserva | UniFAMETRO IDOMED</title>
 
     <link rel="stylesheet" href="style.css">
 
+    <style>
+
+        .reservation-header {
+            margin-bottom: 25px;
+        }
+
+        .reservation-header h1 {
+            color: #063b46;
+            margin-bottom: 8px;
+        }
+
+        .reservation-header p {
+            color: #6c757d;
+        }
+
+        .reservation-form-card {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section-title {
+            color: #063b46;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e4eaec;
+        }
+
+        .reservation-info {
+            margin-top: 10px;
+            margin-bottom: 18px;
+            padding: 13px 15px;
+            background: #eef7f7;
+            border-left: 4px solid #087f86;
+            border-radius: 6px;
+            color: #35565b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .reservation-info.warning {
+            background: #fff7ed;
+            border-left-color: #f28c28;
+            color: #744719;
+        }
+
+        .reservation-info.error {
+            background: #fff0f0;
+            border-left-color: #c93b3b;
+            color: #842c2c;
+        }
+
+        .reservation-rules {
+            background: #063b46;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .reservation-rules h3 {
+            margin-bottom: 12px;
+            font-size: 17px;
+        }
+
+        .reservation-rules ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .reservation-rules li {
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .reservation-rules strong {
+            color: #f28c28;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 22px 0;
+            padding: 15px;
+            background: #f6f8f9;
+            border-radius: 8px;
+        }
+
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-container label {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #425257;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #087f86;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+
+            .reservation-form-card {
+                width: 100%;
+            }
+
+            .reservation-rules {
+                padding: 16px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
+
 <body>
+
 
 <header class="topbar">
 
     <div>
         <strong>PORTAL DE RESERVAS</strong>
-        <span>UNIFAMETRO</span>
+        <span>UNIFAMETRO | IDOMED</span>
     </div>
 
     <button
@@ -35,103 +173,269 @@
 </header>
 
 
+
 <main class="dashboard">
 
-    <section class="welcome">
 
-        <h1>Nova reserva</h1>
+    <section class="welcome reservation-header">
+
+        <a
+            href="dashboard.html"
+            class="back-button"
+        >
+            ← Voltar para o início
+        </a>
+
+        <h1>
+            Nova reserva
+        </h1>
 
         <p>
-            Escolha o ambiente, a data e o horário.
+            Escolha o ambiente, a data e o horário para realizar
+            sua reserva.
         </p>
 
     </section>
 
 
-    <section class="my-reservations">
+
+    <section class="my-reservations reservation-form-card">
+
+
+        <!-- REGRAS -->
+
+        <div class="reservation-rules">
+
+            <h3>
+                Regras para reservas
+            </h3>
+
+            <ul>
+
+                <li>
+                    Reservas em geral devem ser realizadas com
+                    antecedência mínima de <strong>72 horas</strong>.
+                </li>
+
+                <li>
+                    Ambientes de <strong>Tutoria</strong> podem ser
+                    reservados com antecedência mínima de
+                    <strong>24 horas</strong>.
+                </li>
+
+                <li>
+                    Alunos podem reservar por no máximo
+                    <strong>2 horas</strong>.
+                </li>
+
+                <li>
+                    É obrigatório respeitar as regras de utilização
+                    do ambiente escolhido.
+                </li>
+
+            </ul>
+
+        </div>
+
+
 
         <form id="reservationForm">
 
-            <label for="ambiente">
-                Ambiente
-            </label>
 
-            <select id="ambiente" required>
+            <!-- TIPO DE RESERVA -->
 
-                <option value="">
-                    Carregando ambientes...
-                </option>
+            <div class="form-section">
 
-            </select>
+                <div class="form-section-title">
+                    Tipo de reserva
+                </div>
 
 
-            <div
-                id="environmentInfo"
-                class="reservation-info"
-            ></div>
+                <label for="tipo_reserva">
+                    Tipo de reserva
+                </label>
 
 
-            <label for="data">
-                Data
-            </label>
+                <select
+                    id="tipo_reserva"
+                    required
+                >
 
-            <input
-                type="date"
-                id="data"
-                required
-            >
+                    <option value="">
+                        Selecione o tipo de reserva
+                    </option>
 
+                    <option value="professor">
+                        Professor
+                    </option>
 
-            <label for="hora_inicio">
-                Horário de início
-            </label>
+                    <option value="monitoria">
+                        Monitoria
+                    </option>
 
-            <input
-                type="time"
-                id="hora_inicio"
-                required
-            >
+                    <option value="grupo_estudos">
+                        Grupo de Estudos
+                    </option>
 
-
-            <label for="hora_fim">
-                Horário de término
-            </label>
-
-            <input
-                type="time"
-                id="hora_fim"
-                required
-            >
+                </select>
 
 
-            <label for="finalidade">
-                Finalidade
-            </label>
+                <div
+                    id="typeInfo"
+                    class="reservation-info"
+                ></div>
 
-            <textarea
-                id="finalidade"
-                rows="4"
-                placeholder="Informe o motivo da utilização."
-                required
-            ></textarea>
+            </div>
 
 
-            <label for="quantidade">
-                Quantidade de pessoas
-            </label>
 
-            <input
-                type="number"
-                id="quantidade"
-                min="1"
-                placeholder="Ex.: 5"
-            >
+            <!-- AMBIENTE -->
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+                    Ambiente
+                </div>
 
 
-            <div
-                id="availability"
-                class="reservation-info"
-            ></div>
+                <label for="ambiente">
+                    Ambiente
+                </label>
+
+
+                <select
+                    id="ambiente"
+                    required
+                >
+
+                    <option value="">
+                        Carregando ambientes...
+                    </option>
+
+                </select>
+
+
+                <div
+                    id="environmentInfo"
+                    class="reservation-info"
+                ></div>
+
+            </div>
+
+
+
+            <!-- DATA E HORÁRIO -->
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+                    Data e horário
+                </div>
+
+
+                <label for="data">
+                    Data
+                </label>
+
+
+                <input
+                    type="date"
+                    id="data"
+                    required
+                >
+
+
+                <label for="hora_inicio">
+                    Horário de início
+                </label>
+
+
+                <input
+                    type="time"
+                    id="hora_inicio"
+                    required
+                >
+
+
+                <label for="hora_fim">
+                    Horário de término
+                </label>
+
+
+                <input
+                    type="time"
+                    id="hora_fim"
+                    required
+                >
+
+
+                <div
+                    id="availability"
+                    class="reservation-info"
+                ></div>
+
+            </div>
+
+
+
+            <!-- FINALIDADE -->
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+                    Informações da utilização
+                </div>
+
+
+                <label for="finalidade">
+                    Finalidade
+                </label>
+
+
+                <textarea
+                    id="finalidade"
+                    rows="4"
+                    placeholder="Informe o motivo da utilização."
+                    required
+                ></textarea>
+
+
+                <label for="quantidade">
+                    Quantidade de pessoas
+                </label>
+
+
+                <input
+                    type="number"
+                    id="quantidade"
+                    min="1"
+                    placeholder="Ex.: 5"
+                >
+
+            </div>
+
+
+
+            <!-- CONFIRMAÇÃO -->
+
+            <div class="checkbox-container">
+
+                <input
+                    type="checkbox"
+                    id="confirmar_regras"
+                    required
+                >
+
+                <label for="confirmar_regras">
+
+                    Declaro que li e estou de acordo com as regras
+                    de utilização do ambiente e me comprometo a
+                    utilizá-lo de acordo com as normas institucionais.
+
+                </label>
+
+            </div>
+
 
 
             <button
@@ -141,16 +445,22 @@
                 CONFIRMAR RESERVA
             </button>
 
+
             <p id="message"></p>
+
 
         </form>
 
+
     </section>
+
 
 </main>
 
 
+
 <script src="reservar.js"></script>
+
 
 </body>
 

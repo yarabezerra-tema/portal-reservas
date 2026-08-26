@@ -1,370 +1,889 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Portal de Reservas | UniFAMETRO IDOMED</title>
 
+
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+
         body {
-            font-family: Arial, Helvetica, sans-serif;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             min-height: 100vh;
-            background: linear-gradient(135deg, #063b46 0%, #075563 55%, #087f86 100%);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #063b46 0%,
+                    #075563 55%,
+                    #087f86 100%
+                );
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             padding: 30px;
+
         }
+
 
         .login-container {
+
             width: 100%;
+
             max-width: 1050px;
+
             min-height: 600px;
+
             background: #ffffff;
+
             border-radius: 18px;
+
             overflow: hidden;
+
             display: grid;
-            grid-template-columns: 1.05fr 0.95fr;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+
+            grid-template-columns:
+                1.05fr 0.95fr;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.22);
+
         }
 
-        /* LADO INSTITUCIONAL */
+
+        /* ==========================
+           LADO INSTITUCIONAL
+        ========================== */
 
         .institutional {
+
             background: #063b46;
+
             padding: 55px;
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: center;
+
             color: #ffffff;
+
             position: relative;
+
         }
+
 
         .institutional::after {
+
             content: "";
+
             position: absolute;
+
             width: 230px;
+
             height: 230px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+
             border-radius: 50%;
+
             right: -100px;
+
             bottom: -100px;
+
         }
+
 
         .logo-area {
+
             margin-bottom: 45px;
+
         }
+
 
         .logo {
+
             width: min(100%, 400px);
+
             max-height: 120px;
+
             object-fit: contain;
+
             object-position: left center;
+
             display: block;
+
         }
+
 
         .institutional h1 {
+
             font-size: 34px;
+
             line-height: 1.15;
+
             font-weight: 700;
+
             margin-bottom: 18px;
+
         }
+
 
         .institutional h1 span {
+
             color: #f28c28;
+
         }
+
 
         .institutional p {
+
             font-size: 17px;
+
             line-height: 1.7;
-            color: rgba(255, 255, 255, 0.82);
+
+            color:
+                rgba(255, 255, 255, 0.82);
+
             max-width: 470px;
+
         }
+
 
         .institutional-line {
+
             width: 70px;
+
             height: 4px;
+
             background: #f28c28;
+
             border-radius: 10px;
+
             margin: 25px 0;
+
         }
 
-        /* LADO LOGIN */
+
+        /* ==========================
+           LADO LOGIN
+        ========================== */
 
         .login-area {
+
             padding: 55px 60px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             background: #ffffff;
+
         }
+
 
         .login-box {
+
             width: 100%;
+
             max-width: 380px;
+
         }
+
 
         .login-box h2 {
+
             color: #063b46;
+
             font-size: 30px;
+
             margin-bottom: 10px;
+
         }
+
 
         .login-subtitle {
+
             color: #6c757d;
+
             font-size: 15px;
+
             line-height: 1.5;
+
             margin-bottom: 32px;
+
         }
+
 
         .form-group {
+
             margin-bottom: 20px;
+
         }
+
 
         .form-group label {
+
             display: block;
+
             font-size: 14px;
+
             font-weight: 600;
+
             color: #34454a;
+
             margin-bottom: 8px;
+
         }
+
 
         .form-group input {
+
             width: 100%;
+
             height: 50px;
-            border: 1px solid #d8e0e2;
+
+            border:
+                1px solid
+                #d8e0e2;
+
             border-radius: 9px;
+
             padding: 0 15px;
+
             font-size: 15px;
+
             outline: none;
+
             transition: 0.2s;
+
             color: #26383d;
+
         }
+
 
         .form-group input:focus {
+
             border-color: #087f86;
-            box-shadow: 0 0 0 3px rgba(8, 127, 134, 0.10);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(8, 127, 134, 0.10);
+
         }
+
 
         .login-button {
+
             width: 100%;
+
             height: 52px;
+
             border: none;
+
             border-radius: 9px;
+
             background: #f28c28;
+
             color: #ffffff;
+
             font-size: 16px;
+
             font-weight: 700;
+
             cursor: pointer;
+
             transition: 0.2s;
+
             margin-top: 5px;
+
         }
+
 
         .login-button:hover {
+
             background: #df7918;
-            transform: translateY(-1px);
+
+            transform:
+                translateY(-1px);
+
         }
+
 
         .login-button:disabled {
+
             opacity: 0.7;
+
             cursor: wait;
+
             transform: none;
+
         }
+
+
+        /* ==========================
+           ESQUECI MINHA SENHA
+        ========================== */
+
+        .forgot-password {
+
+            display: block;
+
+            text-align: right;
+
+            margin-top: -8px;
+
+            margin-bottom: 20px;
+
+            color: #087f86;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+        }
+
+
+        .forgot-password:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        /* ==========================
+           MENSAGENS
+        ========================== */
 
         .message {
+
             display: none;
+
             margin-top: 18px;
+
             padding: 12px 14px;
+
             border-radius: 8px;
+
             font-size: 14px;
+
             line-height: 1.4;
+
         }
+
 
         .message.error {
+
             display: block;
+
             background: #fff0f0;
+
             color: #a12a2a;
-            border: 1px solid #f2caca;
+
+            border:
+                1px solid
+                #f2caca;
+
         }
+
 
         .message.success {
+
             display: block;
+
             background: #eefaf6;
+
             color: #126b57;
-            border: 1px solid #c6e9df;
+
+            border:
+                1px solid
+                #c6e9df;
+
         }
+
 
         .footer-text {
+
             text-align: center;
+
             margin-top: 28px;
+
             font-size: 12px;
+
             color: #899497;
+
         }
 
-        /* RESPONSIVO */
+
+        /* ==========================
+           RESPONSIVO
+        ========================== */
 
         @media (max-width: 800px) {
+
             body {
+
                 padding: 15px;
+
             }
+
 
             .login-container {
+
                 grid-template-columns: 1fr;
+
                 max-width: 520px;
+
             }
+
 
             .institutional {
+
                 padding: 35px 30px;
+
                 min-height: 320px;
+
             }
 
+
             .institutional h1 {
+
                 font-size: 27px;
+
             }
+
 
             .logo {
+
                 width: 280px;
+
             }
 
+
             .login-area {
+
                 padding: 40px 30px;
+
             }
+
         }
+
 
         @media (max-width: 480px) {
+
             .institutional {
+
                 padding: 30px 25px;
+
             }
+
 
             .institutional h1 {
+
                 font-size: 24px;
+
             }
+
 
             .institutional p {
+
                 font-size: 15px;
+
             }
+
 
             .login-area {
+
                 padding: 35px 25px;
+
             }
 
+
             .login-box h2 {
+
                 font-size: 26px;
+
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <main class="login-container">
 
-        <section class="institutional">
+<main class="login-container">
 
-            <div class="logo-area">
-                <img
-                    src="logo-horizontal.png"
-                    alt="UniFAMETRO IDOMED"
-                    class="logo"
-                >
-            </div>
 
-            <h1>
-                Portal de <span>Reservas</span>
-            </h1>
+    <!-- ==========================
+         LADO INSTITUCIONAL
+    ========================== -->
 
-            <div class="institutional-line"></div>
+    <section class="institutional">
 
-            <p>
-                Sistema de reserva de salas e ambientes acadêmicos.
-                Consulte a disponibilidade e organize suas atividades
-                de forma simples e segura.
+
+        <div class="logo-area">
+
+            <img
+                src="logo-horizontal-transparente.png"
+                alt="UniFAMETRO IDOMED"
+                class="logo"
+            >
+
+        </div>
+
+
+        <h1>
+
+            Portal de
+            <span>Reservas</span>
+
+        </h1>
+
+
+        <div class="institutional-line"></div>
+
+
+        <p>
+
+            Sistema de reserva de salas e ambientes
+            acadêmicos. Consulte a disponibilidade e
+            organize suas atividades de forma simples
+            e segura.
+
+        </p>
+
+
+    </section>
+
+
+
+    <!-- ==========================
+         LADO LOGIN
+    ========================== -->
+
+    <section class="login-area">
+
+
+        <div class="login-box">
+
+
+            <h2>
+                Bem-vindo!
+            </h2>
+
+
+            <p class="login-subtitle">
+
+                Entre com seu e-mail institucional
+                para acessar o Portal de Reservas.
+
             </p>
 
-        </section>
 
 
-        <section class="login-area">
+            <!-- ==========================
+                 LOGIN
+            ========================== -->
 
-            <div class="login-box">
-
-                <h2>Bem-vindo!</h2>
-
-                <p class="login-subtitle">
-                    Entre com seu e-mail institucional para acessar o
-                    Portal de Reservas.
-                </p>
-
-                <form id="login-form">
-
-                    <div class="form-group">
-                        <label for="email">
-                            E-mail
-                        </label>
-
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Digite seu e-mail"
-                            autocomplete="email"
-                            required
-                        >
-                    </div>
+            <form id="login-form">
 
 
-                    <div class="form-group">
-                        <label for="password">
-                            Senha
-                        </label>
+                <div class="form-group">
 
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Digite sua senha"
-                            autocomplete="current-password"
-                            required
-                        >
-                    </div>
+                    <label for="email">
+                        E-mail
+                    </label>
 
 
-                    <button
-                        type="submit"
-                        class="login-button"
-                        id="login-button"
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Digite seu e-mail"
+                        autocomplete="email"
+                        required
                     >
-                        Entrar
-                    </button>
 
-                    <div
-                        id="message"
-                        class="message"
-                    ></div>
-
-                </form>
+                </div>
 
 
-                <p class="footer-text">
-                    Portal de Reservas Acadêmicas
-                </p>
 
-            </div>
+                <div class="form-group">
 
-        </section>
-
-    </main>
+                    <label for="password">
+                        Senha
+                    </label>
 
 
-    <!-- Mantém o sistema de autenticação que já criamos -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Digite sua senha"
+                        autocomplete="current-password"
+                        required
+                    >
 
-    <script src="app.js"></script>
+                </div>
+
+
+
+                <!-- ESQUECI MINHA SENHA -->
+
+                <a
+                    href="#"
+                    id="forgot-password"
+                    class="forgot-password"
+                >
+                    Esqueci minha senha
+                </a>
+
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="login-button"
+                >
+                    Entrar
+                </button>
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
+
+            </form>
+
+
+
+            <p class="footer-text">
+
+                Portal de Reservas Acadêmicas
+
+            </p>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==========================
+     SUPABASE
+========================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="app.js"></script>
+
+
+
+<script>
+
+    /* =====================================
+       CONFIGURAÇÃO DO SUPABASE
+    ====================================== */
+
+    const SUPABASE_URL =
+        "https://aoyvwjbhwaermlapxvkq.supabase.co";
+
+
+    const SUPABASE_KEY =
+        "sb_publishable_IxQS_KAQbFja1ljfrbNMSg_A9yk8AlQ";
+
+
+    const supabaseRecovery =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+
+    /* =====================================
+       ELEMENTOS
+    ====================================== */
+
+    const forgotPassword =
+        document.getElementById(
+            "forgot-password"
+        );
+
+
+    const emailInput =
+        document.getElementById(
+            "email"
+        );
+
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+
+    /* =====================================
+       RECUPERAÇÃO DE SENHA
+    ====================================== */
+
+    forgotPassword.addEventListener(
+        "click",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const email =
+                emailInput.value.trim();
+
+
+            /* ==============================
+               VERIFICAR E-MAIL
+            =============================== */
+
+            if (!email) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Digite seu e-mail institucional antes de solicitar a recuperação da senha.";
+
+                emailInput.focus();
+
+                return;
+
+            }
+
+
+            /* ==============================
+               ENVIANDO
+            =============================== */
+
+            forgotPassword.textContent =
+                "Enviando e-mail...";
+
+            forgotPassword.style.pointerEvents =
+                "none";
+
+
+            /* ==============================
+               ENVIAR RECUPERAÇÃO
+            =============================== */
+
+            const {
+                error
+            } =
+                await supabaseRecovery.auth
+                    .resetPasswordForEmail(
+                        email,
+                        {
+                            redirectTo:
+                                "https://yarabezerra-tema.github.io/portal-reservas/redefinir-senha.html"
+                        }
+                    );
+
+
+            /* ==============================
+               ERRO
+            =============================== */
+
+            if (error) {
+
+                console.error(
+                    "Erro na recuperação:",
+                    error
+                );
+
+
+                message.className =
+                    "message error";
+
+
+                message.textContent =
+                    "Não foi possível enviar o e-mail de recuperação. Verifique o endereço informado e tente novamente.";
+
+
+                forgotPassword.textContent =
+                    "Esqueci minha senha";
+
+
+                forgotPassword.style.pointerEvents =
+                    "auto";
+
+
+                return;
+
+            }
+
+
+            /* ==============================
+               SUCESSO
+            =============================== */
+
+            message.className =
+                "message success";
+
+
+            message.textContent =
+                "E-mail de recuperação enviado! Verifique sua caixa de entrada e clique no link recebido.";
+
+
+            forgotPassword.textContent =
+                "E-mail enviado";
+
+
+        }
+    );
+
+</script>
+
 
 </body>
+
 </html>

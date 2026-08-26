@@ -17,6 +17,36 @@ const message =
 
 
 /* ==========================================
+   VALIDAR E-MAIL INSTITUCIONAL
+========================================== */
+
+function emailInstitucionalValido(email) {
+
+    const emailNormalizado =
+        email.toLowerCase().trim();
+
+
+    /*
+       ALUNOS E MONITORES
+       @aluno.unifametro.edu.br
+
+       PROFESSORES
+       @unifametro.edu.br
+    */
+
+    return (
+        emailNormalizado.endsWith(
+            "@aluno.unifametro.edu.br"
+        ) ||
+        emailNormalizado.endsWith(
+            "@unifametro.edu.br"
+        )
+    );
+
+}
+
+
+/* ==========================================
    LOGIN
 ========================================== */
 
@@ -33,7 +63,8 @@ if (loginForm) {
                 document
                     .getElementById("email")
                     .value
-                    .trim();
+                    .trim()
+                    .toLowerCase();
 
 
             const password =
@@ -42,27 +73,27 @@ if (loginForm) {
                     .value;
 
 
-            message.className = "message";
+            message.className =
+                "message";
+
 
             message.textContent =
                 "Entrando...";
 
 
             /* ==============================
-               VALIDAR E-MAIL INSTITUCIONAL
+               VALIDAR E-MAIL
             =============================== */
 
             if (
-                !email.endsWith(
-                    "@aluno.unifametro.edu.br"
-                )
+                !emailInstitucionalValido(email)
             ) {
 
                 message.className =
                     "message error";
 
                 message.textContent =
-                    "Utilize seu e-mail institucional.";
+                    "Utilize seu e-mail institucional da UniFAMETRO.";
 
                 return;
 
@@ -70,6 +101,10 @@ if (loginForm) {
 
 
             try {
+
+                /* ==============================
+                   AUTENTICAÇÃO SUPABASE
+                =============================== */
 
                 const response =
                     await fetch(
@@ -130,6 +165,26 @@ if (loginForm) {
                     "refresh_token",
                     data.refresh_token
                 );
+
+
+                /* ==============================
+                   SALVAR INFORMAÇÕES DO USUÁRIO
+                =============================== */
+
+                if (data.user) {
+
+                    localStorage.setItem(
+                        "user_id",
+                        data.user.id
+                    );
+
+
+                    localStorage.setItem(
+                        "user_email",
+                        data.user.email
+                    );
+
+                }
 
 
                 /* ==============================

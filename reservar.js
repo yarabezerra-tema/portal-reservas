@@ -78,6 +78,186 @@ function headers() {
 
 
 /* =====================================================
+   OBTER TIPO DO AMBIENTE
+===================================================== */
+
+function obterTipoAmbiente() {
+
+    const option =
+        ambienteSelect.options[
+            ambienteSelect.selectedIndex
+        ];
+
+    if (!option || !option.value) {
+
+        return null;
+
+    }
+
+    return option.dataset.tipo || null;
+
+}
+
+
+/* =====================================================
+   OBTER ANTECEDÊNCIA MÍNIMA
+===================================================== */
+
+function obterAntecedenciaHoras() {
+
+    const tipo =
+        obterTipoAmbiente();
+
+
+    /*
+       LABORATÓRIOS
+       48 horas
+    */
+
+    if (tipo === "laboratorio") {
+
+        return 48;
+
+    }
+
+
+    /*
+       TUTORIA
+       24 horas
+    */
+
+    if (
+        tipo === "tutoria" ||
+        tipo === "sala_tutoria"
+    ) {
+
+        return 24;
+
+    }
+
+
+    /*
+       OUTROS AMBIENTES
+       72 horas
+    */
+
+    return 72;
+
+}
+
+
+/* =====================================================
+   OBTER NOME DA REGRA
+===================================================== */
+
+function obterNomeRegra() {
+
+    const tipo =
+        obterTipoAmbiente();
+
+
+    if (tipo === "laboratorio") {
+
+        return "laboratórios";
+
+    }
+
+
+    if (
+        tipo === "tutoria" ||
+        tipo === "sala_tutoria"
+    ) {
+
+        return "salas de tutoria";
+
+    }
+
+
+    return "este ambiente";
+
+}
+
+
+/* =====================================================
+   VALIDAR ANTECEDÊNCIA
+===================================================== */
+
+function validarAntecedencia() {
+
+    if (
+        !ambienteSelect.value ||
+        !dataInput.value ||
+        !inicioInput.value
+    ) {
+
+        return true;
+
+    }
+
+
+    const horasMinimas =
+        obterAntecedenciaHoras();
+
+
+    /*
+       Criar a data/hora escolhida pelo usuário.
+    */
+
+    const dataHoraReserva =
+        new Date(
+            `${dataInput.value}T${inicioInput.value}:00`
+        );
+
+
+    /*
+       Momento atual + antecedência mínima.
+    */
+
+    const limite =
+        new Date(
+            Date.now() +
+            horasMinimas *
+            60 *
+            60 *
+            1000
+        );
+
+
+    /*
+       Se a reserva estiver antes do limite,
+       ela não pode ser realizada.
+    */
+
+    if (
+        dataHoraReserva <
+        limite
+    ) {
+
+        const nomeRegra =
+            obterNomeRegra();
+
+
+        availability.innerHTML =
+            `⚠️ A reserva para ${nomeRegra} ` +
+            `deve ser realizada com pelo menos ` +
+            `<strong>${horasMinimas} horas de antecedência</strong>.`;
+
+
+        availability.dataset.available =
+            "false";
+
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =====================================================
    CARREGAR AMBIENTES
 ===================================================== */
 
@@ -91,28 +271,21 @@ async function carregarAmbientes() {
 
     try {
 
-        const response = await fetch(
+        const response =
+            await fetch(
+                `${SUPABASE_URL}/rest/v1/ambientes?ativo=eq.true&select=id,nome,tipo,capacidade&order=nome`,
+                {
+                    method: "GET",
+                    headers: headers()
+                }
+            );
 
-            `${SUPABASE_URL}/rest/v1/ambientes?ativo=eq.true&select=id,nome,tipo,capacidade&order=nome`,
-
-            {
-                method: "GET",
-
-                headers: headers()
-
-            }
-
-        );
-
-
-        /* ==========================================
-           SE O SUPABASE RETORNAR ERRO
-        ========================================== */
 
         if (!response.ok) {
 
             const erro =
                 await response.text();
+
 
             console.error(
                 "ERRO SUPABASE:",
@@ -128,7 +301,6 @@ async function carregarAmbientes() {
 
 
             environmentInfo.innerHTML =
-
                 `<strong>
                     Erro ao carregar ambientes.
                 </strong>
@@ -143,10 +315,6 @@ async function carregarAmbientes() {
         }
 
 
-        /* ==========================================
-           CONVERTER RESPOSTA
-        ========================================== */
-
         const ambientes =
             await response.json();
 
@@ -156,10 +324,6 @@ async function carregarAmbientes() {
             ambientes
         );
 
-
-        /* ==========================================
-           VERIFICAR SE EXISTEM AMBIENTES
-        ========================================== */
 
         if (
             !Array.isArray(ambientes) ||
@@ -175,24 +339,17 @@ async function carregarAmbientes() {
             environmentInfo.innerHTML =
                 "Não existem ambientes ativos cadastrados.";
 
+
             return;
 
         }
 
-
-        /* ==========================================
-           LIMPAR CAMPO
-        ========================================== */
 
         ambienteSelect.innerHTML =
             `<option value="">
                 Selecione um ambiente
             </option>`;
 
-
-        /* ==========================================
-           ADICIONAR AMBIENTES
-        ========================================== */
 
         ambientes.forEach(
             function(ambiente) {
@@ -233,6 +390,7 @@ async function carregarAmbientes() {
 
     }
 
+
     catch (error) {
 
         console.error(
@@ -248,7 +406,6 @@ async function carregarAmbientes() {
 
 
         environmentInfo.innerHTML =
-
             `<strong>
                 Erro de conexão com o Supabase.
             </strong>
@@ -268,7 +425,6 @@ ambienteSelect.addEventListener(
     "change",
     function() {
 
-
         const option =
             ambienteSelect.options[
                 ambienteSelect.selectedIndex
@@ -278,6 +434,10 @@ ambienteSelect.addEventListener(
         if (!option.value) {
 
             environmentInfo.textContent = "";
+
+            availability.textContent = "";
+
+            availability.dataset.available = "";
 
             return;
 
@@ -307,12 +467,34 @@ ambienteSelect.addEventListener(
            TUTORIA
         ========================================== */
 
-        else {
+        else if (
+            option.dataset.tipo ===
+            "tutoria" ||
+            option.dataset.tipo ===
+            "sala_tutoria"
+        ) {
 
             environmentInfo.innerHTML =
 
                 "📚 <strong>Sala de Tutoria:</strong> " +
-                "reserva livre conforme disponibilidade. " +
+                "é necessário reservar com pelo menos " +
+                "<strong>24 horas de antecedência</strong>. " +
+                "Duração máxima de 2 horas.";
+
+        }
+
+
+        /* ==========================================
+           OUTROS AMBIENTES
+        ========================================== */
+
+        else {
+
+            environmentInfo.innerHTML =
+
+                "🏫 <strong>Ambiente:</strong> " +
+                "é necessário reservar com pelo menos " +
+                "<strong>72 horas de antecedência</strong>. " +
                 "Duração máxima de 2 horas.";
 
         }
@@ -323,98 +505,6 @@ ambienteSelect.addEventListener(
     }
 );
 
-/* =====================================================
-   VERIFICAR ANTECEDÊNCIA DA RESERVA
-===================================================== */
-
-function obterAntecedenciaHoras() {
-
-    const option =
-        ambienteSelect.options[
-            ambienteSelect.selectedIndex
-        ];
-
-    if (!option || !option.value) {
-        return 72;
-    }
-
-    const tipo =
-        option.dataset.tipo;
-
-    if (tipo === "laboratorio") {
-        return 48;
-    }
-
-    if (tipo === "tutoria") {
-        return 24;
-    }
-
-    return 72;
-}
-
-
-function validarAntecedencia() {
-
-    if (
-        !ambienteSelect.value ||
-        !dataInput.value ||
-        !inicioInput.value
-    ) {
-        return true;
-    }
-
-    const horasMinimas =
-        obterAntecedenciaHoras();
-
-    const dataHoraReserva =
-        new Date(
-            `${dataInput.value}T${inicioInput.value}:00`
-        );
-
-    const limite =
-        new Date(
-            Date.now() +
-            horasMinimas * 60 * 60 * 1000
-        );
-
-    if (
-        dataHoraReserva <
-        limite
-    ) {
-
-        const option =
-            ambienteSelect.options[
-                ambienteSelect.selectedIndex
-            ];
-
-        const tipo =
-            option.dataset.tipo;
-
-        let nomeAmbiente =
-            "este ambiente";
-
-        if (tipo === "laboratorio") {
-            nomeAmbiente =
-                "laboratórios";
-        }
-        else if (tipo === "tutoria") {
-            nomeAmbiente =
-                "salas de tutoria";
-        }
-
-        availability.innerHTML =
-            `⚠️ A reserva para ${nomeAmbiente} ` +
-            `deve ser realizada com pelo menos ` +
-            `<strong>${horasMinimas} horas de antecedência</strong>.`;
-
-        availability.dataset.available =
-            "false";
-
-        return false;
-    }
-
-    return true;
-}
 
 /* =====================================================
    VERIFICAR DISPONIBILIDADE
@@ -444,6 +534,8 @@ async function verificarDisponibilidade() {
 
         availability.textContent = "";
 
+        availability.dataset.available = "";
+
         return;
 
     }
@@ -458,8 +550,10 @@ async function verificarDisponibilidade() {
         availability.innerHTML =
             "⚠️ O horário de término deve ser posterior ao início.";
 
+
         availability.dataset.available =
             "false";
+
 
         return;
 
@@ -487,8 +581,23 @@ async function verificarDisponibilidade() {
         availability.innerHTML =
             "⚠️ A duração máxima da reserva é de 2 horas.";
 
+
         availability.dataset.available =
             "false";
+
+
+        return;
+
+    }
+
+
+    /* ==========================================
+       VERIFICAR ANTECEDÊNCIA
+    ========================================== */
+
+    if (
+        !validarAntecedencia()
+    ) {
 
         return;
 
@@ -503,16 +612,11 @@ async function verificarDisponibilidade() {
 
         const reservasResponse =
             await fetch(
-
                 `${SUPABASE_URL}/rest/v1/reservas?ambiente_id=eq.${ambiente}&data=eq.${data}&status=neq.cancelada&select=hora_inicio,hora_fim`,
-
                 {
                     method: "GET",
-
                     headers: headers()
-
                 }
-
             );
 
 
@@ -531,8 +635,10 @@ async function verificarDisponibilidade() {
             availability.innerHTML =
                 "⚠️ Não foi possível verificar a disponibilidade.";
 
+
             availability.dataset.available =
                 "false";
+
 
             return;
 
@@ -571,15 +677,18 @@ async function verificarDisponibilidade() {
                 "<strong>❌ Horário indisponível.</strong> " +
                 "Já existe uma reserva neste período.";
 
+
             availability.dataset.available =
                 "false";
 
         }
 
+
         else {
 
             availability.innerHTML =
                 "<strong>✓ Horário disponível.</strong>";
+
 
             availability.dataset.available =
                 "true";
@@ -587,6 +696,7 @@ async function verificarDisponibilidade() {
         }
 
     }
+
 
     catch (error) {
 
@@ -598,6 +708,7 @@ async function verificarDisponibilidade() {
 
         availability.innerHTML =
             "⚠️ Erro ao verificar disponibilidade.";
+
 
         availability.dataset.available =
             "false";
@@ -684,6 +795,20 @@ document
 
 
             /* ==========================================
+               VALIDAR DATA
+            ========================================== */
+
+            if (!data) {
+
+                message.textContent =
+                    "Selecione uma data.";
+
+                return;
+
+            }
+
+
+            /* ==========================================
                VALIDAR HORÁRIO
             ========================================== */
 
@@ -723,7 +848,23 @@ document
 
 
             /* ==========================================
-               VERIFICAR DISPONIBILIDADE
+               VALIDAR ANTECEDÊNCIA
+            ========================================== */
+
+            if (
+                !validarAntecedencia()
+            ) {
+
+                message.textContent =
+                    "A reserva não atende à antecedência mínima exigida.";
+
+                return;
+
+            }
+
+
+            /* ==========================================
+               VERIFICAR DISPONIBILIDADE NOVAMENTE
             ========================================== */
 
             await verificarDisponibilidade();
@@ -748,17 +889,11 @@ document
 
             const userResponse =
                 await fetch(
-
                     `${SUPABASE_URL}/auth/v1/user`,
-
                     {
-
                         method: "GET",
-
                         headers: headers()
-
                     }
-
                 );
 
 
@@ -782,11 +917,8 @@ document
 
             const reservaResponse =
                 await fetch(
-
                     `${SUPABASE_URL}/rest/v1/reservas`,
-
                     {
-
                         method: "POST",
 
                         headers: {
@@ -825,7 +957,6 @@ document
                             })
 
                     }
-
                 );
 
 
@@ -846,12 +977,15 @@ document
 
 
                 message.innerHTML =
-
                     `<strong>
                         Não foi possível realizar a reserva.
                     </strong>
                     <br><br>
-                    ${resultado.message || "Erro desconhecido."}`;
+                    ${
+                        resultado.message ||
+                        resultado.error_description ||
+                        "Erro desconhecido."
+                    }`;
 
                 return;
 
@@ -884,6 +1018,12 @@ document
             availability.dataset.available =
                 "";
 
+
+            /* ==========================================
+               RECARREGAR AMBIENTES
+            ========================================== */
+
+            await carregarAmbientes();
 
         }
     );
@@ -928,6 +1068,16 @@ function logout() {
     );
 
 
+    localStorage.removeItem(
+        "user_id"
+    );
+
+
+    localStorage.removeItem(
+        "user_email"
+    );
+
+
     window.location.href =
         "index.html";
 
@@ -951,13 +1101,19 @@ function configurarDataMinima() {
     const mes =
         String(
             hoje.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     const dia =
         String(
             hoje.getDate()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     dataInput.min =

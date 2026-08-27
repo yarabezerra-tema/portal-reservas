@@ -4,6 +4,11 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_IxQS_KAQbFja1ljfrbNMSg_A9yk8AlQ";
 
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 /* ==========================================
    ELEMENTOS

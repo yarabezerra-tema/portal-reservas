@@ -207,6 +207,75 @@ if (forgotPassword) {
 
             event.preventDefault();
 
+            const email =
+                emailInput.value.trim().toLowerCase();
+
+            if (!email) {
+
+                message.className = "message error";
+                message.textContent =
+                    "Digite seu e-mail antes de solicitar a recuperação da senha.";
+
+                emailInput.focus();
+                return;
+
+            }
+
+            if (!emailInstitucionalValido(email)) {
+
+                message.className = "message error";
+                message.textContent =
+                    "Utilize seu e-mail institucional da UniFAMETRO.";
+
+                return;
+
+            }
+
+            forgotPassword.textContent = "Enviando...";
+            forgotPassword.style.pointerEvents = "none";
+
+            const { error } =
+                await supabaseClient.auth.resetPasswordForEmail(
+                    email,
+                    {
+                        redirectTo:
+                            "https://yarabezerra-tema.github.io/portal-reservas/redefinir-senha.html"
+                    }
+                );
+
+            if (error) {
+
+                console.error(error);
+
+                message.className = "message error";
+                message.textContent =
+                    "Não foi possível enviar o e-mail de recuperação.";
+
+                forgotPassword.textContent =
+                    "Esqueci minha senha";
+                forgotPassword.style.pointerEvents = "auto";
+
+                return;
+
+            }
+
+            message.className = "message success";
+            message.textContent =
+                "E-mail enviado! Verifique sua caixa de entrada.";
+
+            forgotPassword.textContent = "E-mail enviado";
+
+        }
+    );
+
+}
+
+    forgotPassword.addEventListener(
+        "click",
+        async function(event) {
+
+            event.preventDefault();
+
 
             const email =
                 emailInput.value

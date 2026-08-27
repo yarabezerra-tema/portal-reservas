@@ -6,7 +6,7 @@ const SUPABASE_KEY =
 
 
 /* ==========================================
-   ELEMENTOS DO LOGIN
+   ELEMENTOS
 ========================================== */
 
 const loginForm =
@@ -14,6 +14,12 @@ const loginForm =
 
 const message =
     document.getElementById("message");
+
+const forgotPassword =
+    document.getElementById("forgot-password");
+
+const emailInput =
+    document.getElementById("email");
 
 
 /* ==========================================
@@ -24,15 +30,6 @@ function emailInstitucionalValido(email) {
 
     const emailNormalizado =
         email.toLowerCase().trim();
-
-
-    /*
-       ALUNOS E MONITORES
-       @aluno.unifametro.edu.br
-
-       PROFESSORES
-       @unifametro.edu.br
-    */
 
     return (
         emailNormalizado.endsWith(
@@ -60,9 +57,7 @@ if (loginForm) {
 
 
             const email =
-                document
-                    .getElementById("email")
-                    .value
+                emailInput.value
                     .trim()
                     .toLowerCase();
 
@@ -81,10 +76,6 @@ if (loginForm) {
                 "Entrando...";
 
 
-            /* ==============================
-               VALIDAR E-MAIL
-            =============================== */
-
             if (
                 !emailInstitucionalValido(email)
             ) {
@@ -101,10 +92,6 @@ if (loginForm) {
 
 
             try {
-
-                /* ==============================
-                   AUTENTICAÇÃO SUPABASE
-                =============================== */
 
                 const response =
                     await fetch(
@@ -133,10 +120,6 @@ if (loginForm) {
                     await response.json();
 
 
-                /* ==============================
-                   ERRO NO LOGIN
-                =============================== */
-
                 if (!response.ok) {
 
                     message.className =
@@ -151,10 +134,6 @@ if (loginForm) {
                 }
 
 
-                /* ==============================
-                   SALVAR SESSÃO
-                =============================== */
-
                 localStorage.setItem(
                     "access_token",
                     data.access_token
@@ -166,10 +145,6 @@ if (loginForm) {
                     data.refresh_token
                 );
 
-
-                /* ==============================
-                   SALVAR INFORMAÇÕES DO USUÁRIO
-                =============================== */
 
                 if (data.user) {
 
@@ -186,10 +161,6 @@ if (loginForm) {
 
                 }
 
-
-                /* ==============================
-                   IR PARA DASHBOARD
-                =============================== */
 
                 window.location.href =
                     "dashboard.html";
@@ -210,6 +181,182 @@ if (loginForm) {
 
                 message.textContent =
                     "Não foi possível conectar ao sistema.";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   ESQUECI MINHA SENHA
+========================================== */
+
+if (forgotPassword) {
+
+    forgotPassword.addEventListener(
+        "click",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const email =
+                emailInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            /* ==============================
+               VERIFICAR E-MAIL
+            =============================== */
+
+            if (!email) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Digite seu e-mail antes de solicitar a recuperação da senha.";
+
+                emailInput.focus();
+
+                return;
+
+            }
+
+
+            /* ==============================
+               VALIDAR E-MAIL
+            =============================== */
+
+            if (
+                !emailInstitucionalValido(email)
+            ) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Utilize seu e-mail institucional da UniFAMETRO.";
+
+                return;
+
+            }
+
+
+            /* ==============================
+               ALTERAR TEXTO
+            =============================== */
+
+            forgotPassword.textContent =
+                "Enviando e-mail...";
+
+            forgotPassword.style.pointerEvents =
+                "none";
+
+
+            message.className =
+                "message";
+
+            message.textContent =
+                "";
+
+
+            try {
+
+                /* ==============================
+                   SOLICITAR RECUPERAÇÃO
+                =============================== */
+
+                const response =
+                    await fetch(
+                        `${SUPABASE_URL}/auth/v1/recover`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "apikey":
+                                    SUPABASE_KEY
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    email: email,
+                                    redirect_to:
+                                        "https://yarabezerra-tema.github.io/portal-reservas/redefinir-senha.html"
+                                })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Resposta recuperação:",
+                    data
+                );
+
+
+                /* ==============================
+                   ERRO
+                =============================== */
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.msg ||
+                        data.error_description ||
+                        "Erro ao enviar recuperação."
+                    );
+
+                }
+
+
+                /* ==============================
+                   SUCESSO
+                =============================== */
+
+                message.className =
+                    "message success";
+
+                message.textContent =
+                    "E-mail de recuperação enviado! Verifique sua caixa de entrada.";
+
+                forgotPassword.textContent =
+                    "E-mail enviado";
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Erro na recuperação:",
+                    error
+                );
+
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Não foi possível enviar o e-mail de recuperação. Verifique o e-mail informado e tente novamente.";
+
+
+                forgotPassword.textContent =
+                    "Esqueci minha senha";
+
+
+                forgotPassword.style.pointerEvents =
+                    "auto";
 
             }
 

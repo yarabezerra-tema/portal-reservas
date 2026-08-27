@@ -323,6 +323,98 @@ ambienteSelect.addEventListener(
     }
 );
 
+/* =====================================================
+   VERIFICAR ANTECEDÊNCIA DA RESERVA
+===================================================== */
+
+function obterAntecedenciaHoras() {
+
+    const option =
+        ambienteSelect.options[
+            ambienteSelect.selectedIndex
+        ];
+
+    if (!option || !option.value) {
+        return 72;
+    }
+
+    const tipo =
+        option.dataset.tipo;
+
+    if (tipo === "laboratorio") {
+        return 48;
+    }
+
+    if (tipo === "tutoria") {
+        return 24;
+    }
+
+    return 72;
+}
+
+
+function validarAntecedencia() {
+
+    if (
+        !ambienteSelect.value ||
+        !dataInput.value ||
+        !inicioInput.value
+    ) {
+        return true;
+    }
+
+    const horasMinimas =
+        obterAntecedenciaHoras();
+
+    const dataHoraReserva =
+        new Date(
+            `${dataInput.value}T${inicioInput.value}:00`
+        );
+
+    const limite =
+        new Date(
+            Date.now() +
+            horasMinimas * 60 * 60 * 1000
+        );
+
+    if (
+        dataHoraReserva <
+        limite
+    ) {
+
+        const option =
+            ambienteSelect.options[
+                ambienteSelect.selectedIndex
+            ];
+
+        const tipo =
+            option.dataset.tipo;
+
+        let nomeAmbiente =
+            "este ambiente";
+
+        if (tipo === "laboratorio") {
+            nomeAmbiente =
+                "laboratórios";
+        }
+        else if (tipo === "tutoria") {
+            nomeAmbiente =
+                "salas de tutoria";
+        }
+
+        availability.innerHTML =
+            `⚠️ A reserva para ${nomeAmbiente} ` +
+            `deve ser realizada com pelo menos ` +
+            `<strong>${horasMinimas} horas de antecedência</strong>.`;
+
+        availability.dataset.available =
+            "false";
+
+        return false;
+    }
+
+    return true;
+}
 
 /* =====================================================
    VERIFICAR DISPONIBILIDADE

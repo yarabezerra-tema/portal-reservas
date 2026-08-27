@@ -4,11 +4,17 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_IxQS_KAQbFja1ljfrbNMSg_A9yk8AlQ";
 
+
+/* ==========================================
+   SUPABASE
+========================================== */
+
 const supabaseClient =
     supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
+
 
 /* ==========================================
    ELEMENTOS
@@ -60,12 +66,10 @@ if (loginForm) {
 
             event.preventDefault();
 
-
             const email =
                 emailInput.value
                     .trim()
                     .toLowerCase();
-
 
             const password =
                 document
@@ -76,10 +80,13 @@ if (loginForm) {
             message.className =
                 "message";
 
-
             message.textContent =
                 "Entrando...";
 
+
+            /* ==============================
+               VALIDAR E-MAIL
+            =============================== */
 
             if (
                 !emailInstitucionalValido(email)
@@ -95,6 +102,10 @@ if (loginForm) {
 
             }
 
+
+            /* ==============================
+               LOGIN
+            =============================== */
 
             try {
 
@@ -125,6 +136,10 @@ if (loginForm) {
                     await response.json();
 
 
+                /* ==============================
+                   ERRO NO LOGIN
+                =============================== */
+
                 if (!response.ok) {
 
                     message.className =
@@ -138,6 +153,10 @@ if (loginForm) {
 
                 }
 
+
+                /* ==============================
+                   SALVAR SESSÃO
+                =============================== */
 
                 localStorage.setItem(
                     "access_token",
@@ -166,6 +185,10 @@ if (loginForm) {
 
                 }
 
+
+                /* ==============================
+                   IR PARA O DASHBOARD
+                =============================== */
 
                 window.location.href =
                     "dashboard.html";
@@ -207,75 +230,6 @@ if (forgotPassword) {
 
             event.preventDefault();
 
-            const email =
-                emailInput.value.trim().toLowerCase();
-
-            if (!email) {
-
-                message.className = "message error";
-                message.textContent =
-                    "Digite seu e-mail antes de solicitar a recuperação da senha.";
-
-                emailInput.focus();
-                return;
-
-            }
-
-            if (!emailInstitucionalValido(email)) {
-
-                message.className = "message error";
-                message.textContent =
-                    "Utilize seu e-mail institucional da UniFAMETRO.";
-
-                return;
-
-            }
-
-            forgotPassword.textContent = "Enviando...";
-            forgotPassword.style.pointerEvents = "none";
-
-            const { error } =
-                await supabaseClient.auth.resetPasswordForEmail(
-                    email,
-                    {
-                        redirectTo:
-                            "https://yarabezerra-tema.github.io/portal-reservas/redefinir-senha.html"
-                    }
-                );
-
-            if (error) {
-
-                console.error(error);
-
-                message.className = "message error";
-                message.textContent =
-                    "Não foi possível enviar o e-mail de recuperação.";
-
-                forgotPassword.textContent =
-                    "Esqueci minha senha";
-                forgotPassword.style.pointerEvents = "auto";
-
-                return;
-
-            }
-
-            message.className = "message success";
-            message.textContent =
-                "E-mail enviado! Verifique sua caixa de entrada.";
-
-            forgotPassword.textContent = "E-mail enviado";
-
-        }
-    );
-
-}
-
-    forgotPassword.addEventListener(
-        "click",
-        async function(event) {
-
-            event.preventDefault();
-
 
             const email =
                 emailInput.value
@@ -284,7 +238,7 @@ if (forgotPassword) {
 
 
             /* ==============================
-               VERIFICAR E-MAIL
+               VERIFICAR SE DIGITOU E-MAIL
             =============================== */
 
             if (!email) {
@@ -303,7 +257,7 @@ if (forgotPassword) {
 
 
             /* ==============================
-               VALIDAR E-MAIL
+               VALIDAR E-MAIL INSTITUCIONAL
             =============================== */
 
             if (
@@ -322,11 +276,11 @@ if (forgotPassword) {
 
 
             /* ==============================
-               ALTERAR TEXTO
+               ALTERAR BOTÃO
             =============================== */
 
             forgotPassword.textContent =
-                "Enviando e-mail...";
+                "Enviando...";
 
             forgotPassword.style.pointerEvents =
                 "none";
@@ -339,57 +293,35 @@ if (forgotPassword) {
                 "";
 
 
+            /* ==============================
+               ENVIAR RECUPERAÇÃO
+            =============================== */
+
             try {
 
-                /* ==============================
-                   SOLICITAR RECUPERAÇÃO
-                =============================== */
-
-                const response =
-                    await fetch(
-                        `${SUPABASE_URL}/auth/v1/recover`,
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-
-                                "apikey":
-                                    SUPABASE_KEY
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    email: email,
-                                    redirect_to:
-                                        "https://yarabezerra-tema.github.io/portal-reservas/redefinir-senha.html"
-                                })
-                        }
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                console.log(
-                    "Resposta recuperação:",
-                    data
-                );
+                const { error } =
+                    await supabaseClient.auth
+                        .resetPasswordForEmail(
+                            email,
+                            {
+                                redirectTo:
+                                    "https://yarabezerra-tema.github.io/portal-reservas/redefinir-senha.html"
+                            }
+                        );
 
 
                 /* ==============================
-                   ERRO
+                   VERIFICAR ERRO
                 =============================== */
 
-                if (!response.ok) {
+                if (error) {
 
-                    throw new Error(
-                        data.msg ||
-                        data.error_description ||
-                        "Erro ao enviar recuperação."
+                    console.error(
+                        "Erro Supabase:",
+                        error
                     );
+
+                    throw error;
 
                 }
 
@@ -406,6 +338,7 @@ if (forgotPassword) {
 
                 forgotPassword.textContent =
                     "E-mail enviado";
+
 
             }
 
@@ -427,7 +360,6 @@ if (forgotPassword) {
 
                 forgotPassword.textContent =
                     "Esqueci minha senha";
-
 
                 forgotPassword.style.pointerEvents =
                     "auto";

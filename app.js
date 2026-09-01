@@ -2,7 +2,7 @@ const SUPABASE_URL =
     "https://walmglpuysduteeiwybh.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_IxQS_KAQbFja1ljfrbNMSg_A9yk8AlQ";
+    "sb_publishable_VROzleLIlpKkECuqWVqzXw_rUwTMpd6";
 
 
 /* =====================================================
